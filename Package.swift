@@ -20,7 +20,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .binaryTarget(
             name: "UnityFramework",
-            url: "https://api.github.com/repos/BrainPark/brainpac-nih-ios/releases/assets/105518582.zip",
+            url: "https://github.com/BrainPark/brainpac-nih-ios/releases/latest/download/UnityFramework.xcframework.zip",
             checksum: "a08d82d677796569ade2d9ab5d9d319e170215ca34c1af4611dd000dd7a93c65"
         ),
     ]
