@@ -1,3 +1,6 @@
 .DS_Store
 *.dSYM
 *.dSYM.zip
+*.xcuserstate
+xcuserdata
+xcuserdata/*
