@@ -9,7 +9,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "brainpac-nih-ios",
-            targets: ["UnityFramework"]),
+            targets: ["BrainPAC"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -23,5 +23,13 @@ let package = Package(
             url: "https://github.com/BrainPark/brainpac-nih-ios/releases/latest/download/UnityFramework.xcframework.zip",
             checksum: "acb5826d729858e1872a185dc34955c74d81743f5ee7b306564f035846e8c956"
         ),
+        
+        .target(
+            name: "BrainPAC",
+            dependencies: [
+                .target(name: "UnityFramework"),
+            ]
+        ),
+
     ]
 )
