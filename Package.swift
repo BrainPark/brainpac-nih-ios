@@ -21,7 +21,7 @@ let package = Package(
         .binaryTarget(
             name: "UnityFramework",
             url: "https://github.com/BrainPark/brainpac-nih-ios/releases/latest/download/UnityFramework.xcframework.zip",
-            checksum: "ee084923eed8637166f1eebb6cf924416476d3fd1c48a3fad01577f2a0861b95"
+            checksum: "acb5826d729858e1872a185dc34955c74d81743f5ee7b306564f035846e8c956"
         ),
     ]
 )
