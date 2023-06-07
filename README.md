@@ -6,109 +6,47 @@ This Swift package contains two of the games, BART (balloons game) and SST (drag
 
 ## Installation
 
-As this is a private package, you will need to add your GitHub or GitHub Enterprise account in Xcode’s preferences. Then, select File > Swift Packages > Add Package Dependency and search for "brainpac-nih-ios".
+Follow normal Swift package installation. Select File > Add Packages... and search for `https://github.com/BrainPark/brainpac-nih-ios`. Latest production releases are on the `main` branch.
 
-Once the package has been added, select your target and under General > Frameworks, Libraries and Embedded Content, add UnityFramework.framework. Then, navigate to Build Phases > Build Binary with Libraries and remove UnityFramework.framework.
+Ensure that the BrainPACNIH library is in "Frameworks, Libraries and Embedded Content" under the General tab for your target.
 
 ## Usage
 
- > The following code is in Obj-C. Use a bridging header for Swift integration.
+> If running on an iOS simulator, it must be running on x86_64 architecture. This is a limitation of Unity. If you are using XCode 14.3+, you can expose these simulators by going to Product > Destination > Destination Architectures and select 'Show Rosetta Destinations'.
 
-Initialise the `UnityFramework` by including the headers and getting the singleton instance:
+This package allows you to call a SwiftUI.View called `BrainPACView` that opens the Unity window with the BART or SST game loaded.
 
-```objc
-#include <UnityFramework/UnityFramework.h>
-//...
-NSString* bundlePath = nil;
-bundlePath = [[NSBundle mainBundle] bundlePath];
-bundlePath = [bundlePath stringByAppendingString: @"/Frameworks/UnityFramework.framework"];
+`BrainPACView` accepts a `game` argument of the enum type `BrainPACGame`. Its cases are `.bart` and `.sst`.
 
-NSBundle* bundle = [NSBundle bundleWithPath: bundlePath];
-if ([bundle isLoaded] == false) [bundle load];
+Simple usage might look like:
 
-UnityFramework* ufw = [bundle.principalClass getInstance];
-if (![ufw appController])
-{
-    // unity is not initialized
-    [ufw setExecuteHeader: &_mh_execute_header];
+```swift
+import SwiftUI
+import BrainPACNIH
+
+struct ContentView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                Spacer()
+                NavigationLink(destination: BrainPACView(game: BrainPACGame.bart)) {
+                    Text("Play BART")
+                }
+                Spacer()
+                NavigationLink(destination: BrainPACView(game: BrainPACGame.sst)) {
+                    Text("Play SST")
+                }
+                Spacer()
+            }
+        }
+    }
 }
 ```
 
-You can set an object to listen to Unity events using the following methods:
-
-```objc
-// Register listener
-[[self ufw] registerFrameworkListener: self];
-// Unregister listener
-[[self ufw] unregisterFrameworkListener: self];
-```
-
-To run Unity when other Views exist, call the following method (see [Unity docs](https://docs.unity3d.com/Manual/UnityasaLibrary-iOS.html) for more info):
-
-```objc
-[[self ufw] runEmbeddedWithArgc: gArgc argv: gArgv appLaunchOpts: appLaunchOpts];
-```
-
-You can now show a Unity view whilst a non-Unity view is showing:
-
-```objc
-[[self ufw] showUnityWindow];
-```
-
-To load a specific game, you can call the following method, which sends a message to the GameManager to execute the LoadGame function with either "BART" or "SST":
-
-```obj-c
-[[self ufw] sendMessageToGOWithName: "GameManager" functionName: "LoadGame" message: "BART"];
-```
-
-> NOTE: You can call the above method after UnityFramework is initialised, before `runEmbeddedWithArgc`.
-
-With the `NativeCallProxy`, you can set a callback that executes upon a participant completing a session. To do this, conform to the `NativeCallsProtocol` and implement the following methods:
-
-```objc
-#include <UnityFramework/UnityFramework.h>
-#include <UnityFramework/NativeCallProxy.h>
-//...
-@interface AppDelegate : UIResponder<UIApplicationDelegate, UnityFrameworkListener, NativeCallsProtocol>
-@property UnityFramework* ufw;
-//...
-@end
-//...
-@implementation AppDelegate
-//...
-- (void)onSessionComplete:(NSString*)message
-{
-    //... callback code goes here
-}
-//...
-@end
-```
-
-You must also call the following method before the callback can be run:
-
-```objc
-[NSClassFromString(@"FrameworkLibAPI") registerAPIforNativeCalls:self];
-```
-
-For more information on the UnityFramework methods, please refer to the [Unity docs](https://docs.unity3d.com/Manual/UnityasaLibrary-iOS.html).
-
-## Cached data
-
-When the game is completed, the data is stored in a persistent cache on the device. 
-
-In iOS, the path to this file is `/var/mobile/Containers/Data/Application/<guid>/Documents/<filename>.json`
-
-Possible filenames are `bartsession.json`, `bartconfig.json`, `sstsession.json` and `sstconfig.json`. Session files contain data collected during the participant's session, whereas config files contain the configuration used for the game. You can find the schemas [here](https://github.com/BrainPark/brainpac-nih-schemas/tree/main/schemas).
-
-To clear the cache, you can call the following method:
-
-```objc
-[[self ufw] sendMessageToGOWithName: "GameDataManager" functionName: "ClearCache" message: ""];
-```
+> NOTE: `BrainPACView` adds a new UIWindow required to run Unity. Once the game session is complete, it unloads the window and returns to the previous key window.
 
 ## Known issues
 
-- The package cannot be used with the iOS simulator as Unity only supports the ability to export either the Device or Simulator SDK at a time.
-- You can’t load more than one instance of the Unity runtime.
+- You can’t load more than one instance of the Unity runtime. This will be an issue if there are multiple packages using the UnityFramework.
 
 ## License
