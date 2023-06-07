@@ -17,6 +17,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>BrainPACNIH</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>brainpac-nih-ios</key>
 		<dict>
 			<key>primary</key>
