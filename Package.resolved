@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "brainpac-nih-unityframework",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/BrainPark/brainpac-nih-unityframework.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "077333a9802f96b58dfa89a1c0e2cee2082c36d4"
+      }
+    }
+  ],
+  "version" : 2
+}
