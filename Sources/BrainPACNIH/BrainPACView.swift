@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Foundation
 
 public enum BrainPACGame : String {
     case bart = "BART"
@@ -17,9 +18,11 @@ public struct BrainPACView: View {
     @Environment(\.presentationMode) var presentationMode
     
     var game: BrainPACGame
+    var onSessionComplete: ((String, String) -> Void)
     
-    public init(game: BrainPACGame) {
+    public init(game: BrainPACGame, onSessionComplete: @escaping (String, String) -> Void) {
         self.game = game
+        self.onSessionComplete = onSessionComplete
     }
     
     public var body: some View {
@@ -32,6 +35,7 @@ public struct BrainPACView: View {
                 .flatMap { ($0 as? UIWindowScene)?.windows ?? [] }
                 .last { $0.isKeyWindow }
             Unity.shared.setHostMainWindow(window)
+            Unity.shared.onSessionCompleteCallback = self.onSessionComplete
             
             // Pop this view from stack when Unity window unloads
             Unity.shared.onUnload(callback: {

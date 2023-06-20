@@ -28,6 +28,7 @@ public class Unity: UIResponder, UIApplicationDelegate {
     var hostMainWindow : UIWindow?
     
     var unloadCallback : (() -> Void)?
+    public var onSessionCompleteCallback: ((String, String) -> Void)?
 
     private var isInitialized: Bool {
         ufw?.appController() != nil
@@ -162,7 +163,10 @@ extension Unity: UnityFrameworkListener {
 }
 
 extension Unity: NativeCallsProtocol {
-    public func onSessionComplete(_ message: String!) {
+    public func onSessionComplete(_ resultsPath: String!, schema schemaUrl: String!) {
+        if let callback = onSessionCompleteCallback {
+            callback(resultsPath, schemaUrl)
+        }
         unloadWindow()
     }
 }
