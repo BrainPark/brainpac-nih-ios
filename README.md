@@ -16,7 +16,7 @@ Ensure that the BrainPACNIH library is in "Frameworks, Libraries and Embedded Co
 
 This package allows you to call a SwiftUI.View called `BrainPACView` that opens the Unity window with the BART or SST game loaded.
 
-`BrainPACView` accepts a `game` argument of the enum type `BrainPACGame`. Its cases are `.bart` and `.sst`.
+`BrainPACView` accepts a `game` argument of the enum type `BrainPACGame`. Its cases are `.bart` and `.sst`. The second argument, `onSessionComplete`, is a callback that passs the arguments `resultsPath: String` and `schemaUrl: String`. `resultsPath` is the path to the results .json file on the device storage, and `schemaUrl` is the URL to the corresponding JSON schema.
 
 Simple usage might look like:
 
@@ -24,16 +24,21 @@ Simple usage might look like:
 import SwiftUI
 import BrainPACNIH
 
+func onSessionComplete(resultsPath: String, schemaUrl: String) -> Void {
+    print(resultsPath)
+    print(schemaUrl)
+}
+
 struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
                 Spacer()
-                NavigationLink(destination: BrainPACView(game: BrainPACGame.bart)) {
+                NavigationLink(destination: BrainPACView(game: BrainPACGame.bart, onSessionComplete: onSessionComplete)) {
                     Text("Play BART")
                 }
                 Spacer()
-                NavigationLink(destination: BrainPACView(game: BrainPACGame.sst)) {
+                NavigationLink(destination: BrainPACView(game: BrainPACGame.sst, onSessionComplete: onSessionComplete)) {
                     Text("Play SST")
                 }
                 Spacer()
