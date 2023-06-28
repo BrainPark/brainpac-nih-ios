@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/BrainPark/brainpac-nih-unityframework.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "995e7e618e6438afa700bc8490d16b54f44ee26a"
+        "revision" : "995e7e618e6438afa700bc8490d16b54f44ee26a",
+        "version" : "0.0.6"
       }
     }
   ],
